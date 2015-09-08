@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Sentiment Labeling</title>
+
+    <!-- Bootstrap -->
+    <link href="{{ url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+
+    <script src="{{ url_for('static', filename='lib/jquery-1.11.3.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/socket.io.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/handlebars-v3.0.3.js') }}"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-3 sidebar">
+          <ul class="nav nav-sidebar" id='chat-list'>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main" id="right">
+          <table id="message-list">
+            <tr>
+              <td>
+              請點選左邊的聊天室
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% raw %}
+    <script id="chat-template" type="text/x-handlebars-template">
+      <li class="" data-chat-id='{{chat_id}}'><a href="#">
+        <img class='profile-img' src='{{user_image_1}}' />
+        <img class='profile-img' src='{{user_image_2}}' />
+        <span class='user-name'>{{user_name_1}} & {{user_name_2}}</span>
+      </a></li>
+    </script>
+    <script id="message-template" type="text/x-handlebars-template">
+      <tr data-msg-id="{{msg_id}}">
+        <td class="messages"><div class="_5wd4 _1nc7 direction_ltr _5yt9 _2cnu logged"><a class="_5ys_" id="js_f"><img src="{{sender_image}}"></a><div class="_5wd9"><div class="_5wde"><div class="_5w1r _5wdf _3okg" style="max-width:188px;"><div class="_d97"><span class="_5yl5" >{{content}}</span></div></div></div></div></div></td>
+        <td class="labels">
+          <div class="btn-group" role="group" data-chatmood="{{data}}">
+            {{#each sentiments}}
+            <button type="button" class="btn {{#if this.selected}} btn-primary {{else}} btn-default {{/if}}" {{#if this.disabled}} disabled="disabled" {{/if}} value='{{this.name}}'><span class="_emotion _{{this.name}}"></span></button>
+            {{/each}}
+          </div>
+        </td>
+      </tr>
+    </script>
+    {% endraw %}
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+    </head>
+    <body>
+        <div id="container">
+            <textarea disabled id="chatroom" style="height:300px; max-height:300px; width:600px"></textarea><br />
+            <input id="name" style="width:130px" value="ws" />
+            <input id="words" style="width:460px" />
+        </div>
+        <script type="text/javascript"> 
+
+            var socket = null;
+            
+            function send_data() {
+                var name = document.getElementById('name');
+                var words = document.getElementById('words');
+                if (name.value != '' && words.value != '') {
+                    var msg = {
+                        'content': encodeURIComponent(name.value) + ':' + 
+                                   encodeURIComponent(words.value) + '\n'
+                    }
+                    socket.emit('echo', msg);
+                }
+                words.value = '';
+            }
+
+            (function() {
+                var namespace = '/echo';
+                socket = io.connect(
+                    'http://' + document.domain + 
+                    ':' + location.port + namespace);
+                
+                socket.on('connect', function() {
+                    console.log('connected');
+                });
+
+                socket.on('echo', function(message) {
+                    var chatroom = document.getElementById('chatroom');
+                    var response = JSON.parse(message);
+                    chatroom.innerHTML += response.content;
+                    chatroom.scrollTop = chatroom.scrollHeight;
+                });
+
+                var words = document.getElementById('words');
+                words.onkeypress = function(e) { if (e.keyCode == 13) send_data();} 
+
+            })();
+
+        </script>
+    </body>
+</html>

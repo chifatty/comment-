@@ -1,0 +1,27 @@
+{
+    "name": "Crowd Critique",
+    "description": "Agree +1 button for Goole Document",
+    "version": "0.0",
+    "icons": { "16": "images/icon16.png",
+               "48": "images/icon48.png",
+               "128": "images/icon128.png"},
+
+    "background": { "scripts": ["socket.io.min.js", "background.js"] },
+    "permissions": [
+        "http://localhost:8080/*",
+        "tabs"
+    ],
+    "externally_connectable": {
+        "matches": ["http://localhost:8080/*"]
+    },
+    "content_scripts": [{
+            "matches": ["https://docs.google.com/document/*"],
+            "css": ["doc.css", "animate.css"],
+            "js": ["jquery-1.11.3.min.js",
+                   "handlebars-v3.0.3.js",
+                   "sha-256.js",
+                   "doc.js"]
+        }
+    ],
+    "manifest_version": 2
+}
