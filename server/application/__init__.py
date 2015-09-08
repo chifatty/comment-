@@ -19,4 +19,3 @@ redis_pool = redis.ConnectionPool(host=app.config.get('REDIS_HOST'),
                                   db=app.config.get('REDIS_DB'))
 # Pull in URL dispatch routes
 import urls
-import dashboard
