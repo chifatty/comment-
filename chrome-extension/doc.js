@@ -148,13 +148,21 @@ var monitor_comment = function() {
 
 // Extract the current user id
 var extract_user_id = function () {
-    var root = $('div#docs-titlebar-container');
-    var container = root.find('div[data-userid]');
-    if (container.length > 0) {
-        user_id = container.attr('data-userid');
-        user_name = container.attr('data-name');
+    var scripts = $('script');
+    for (var i = 0; i < scripts.length; i++) {
+        var text = scripts.eq(i).text();
+        var target = text.indexOf('"docs-pid":"')
+        if (target > 0) {
+            text = text.substring(target + 12);
+            var poe = text.indexOf('"');
+            user_id = text.substring(0, poe);
+            break;
+        }
     }
-    if (user_id != null) {
+    user_name = $('div#docs-header').find('div.gb_3a').text();
+    if (user_id && user_name) {
+        console.log(user_id);
+        console.log(user_name);
         clearInterval(timer_u);
     }
 }
@@ -186,7 +194,7 @@ var main = function () {
     console.log('Crowd Critique loaded');
     port = chrome.runtime.connect({name: "comment++"});
     chrome.runtime.onMessage.addListener(server_response_handler);
-    timer_u = setInterval(extract_user_id, 1000);
+    timer_u = setInterval(extract_user_id, 3000);
     timer_c = setInterval(monitor_comment, 1000);
 }
 
